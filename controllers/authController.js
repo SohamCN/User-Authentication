@@ -1,4 +1,4 @@
-const UserAuth = require('../models/user');
+const UserAuth = require('../models/user-joi');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const register = async(req,res,next)=>{
@@ -12,7 +12,8 @@ const register = async(req,res,next)=>{
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
-            password: hashedPass
+            password: hashedPass,
+            created_at: req.header.created_at
         })
         console.log("SaveHolo??",user);
         user.save()
