@@ -3,8 +3,13 @@ const router = express.Router()
 
 const authMiddleware = require('../middlewares/auth-middleware')
 const AuthController = require('../controllers/authController')
+const postgreController = require('../controllers/postgresController')
 
 router.post('/register', authMiddleware.validatePassword, AuthController.register);
+
+router.post('/add-user', postgreController.register), 
+
+router.get('/get-users', postgreController.getAllUsers)
 
 router.post('/login', AuthController.login);
 
