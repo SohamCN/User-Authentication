@@ -7,13 +7,17 @@ const postgreController = require('../controllers/postgresController')
 
 router.post('/register', authMiddleware.validatePassword, AuthController.register);
 
-router.post('/add-user', postgreController.register), 
+router.post('/add-user', postgreController.register);
+
+router.post('/create-login', postgreController.login);
 
 router.get('/get-users', postgreController.getAllUsers)
 
 router.post('/login', AuthController.login);
 
 router.put('/edit-user/:id', authMiddleware.verifyToken, AuthController.editUser);
+
+router.put('/user-edit/:id',  postgreController.editUser);
 
 router.delete('/delete-user/:id', AuthController.deleteUser);
 

@@ -36,4 +36,62 @@ const getAllUsers = async (req,res,next)=>{
     }
 }
 
-module.exports = {register, getAllUsers}
+const login = async(req,res,next)=>{
+    let {username, password} = req.body;
+    
+
+   let userloggedIn = await UserAuth.findOne({where:{username:username}})
+        if(userloggedIn){
+            bcrypt.compare(password, userloggedIn.password, (err,result)=>{
+                if(err){
+                    res.json({
+                        error:err
+                    })
+                }
+                if(result){
+                    let token = jwt.sign({name:userloggedIn.name},'verySecretValue',{expiresIn:'1h'})
+                    res.json({
+                        message:'Login Successful!',
+                        token
+                    
+                })
+                }else{
+                    res.json({message:'Username and Password not matching'})
+                }
+            })
+    
+        }else{
+            res.json({
+                message:'No User found!'
+            })
+        }
+    }
+
+    const editUser = async (req,res,next)=>{
+        const id = req.params.id;
+    
+        if(req.body.password){
+            await bcrypt.hash(req.body.password, 10, async (err, hashedPass)=>{
+                
+                req.body.password = hashedPass;
+                try{
+                    let updatedUser = await UserAuth.update(req.body,{where:{id:id}},{new:true});
+                    console.log(updatedUser);
+                    res.status(200).send({message: "Update Successful", updatedUser})
+                }catch(err){
+                    res.status(500).send(err.message)
+                }
+            })
+        }else{
+            try{
+        let updatedUser = await UserAuth.update(req.body,{where:{id:id}},{new:true})
+            res.status(200).send({message:"Update Successful", updatedUser})
+        }catch(err){
+            res.status(500).send({
+                message: err.message
+            })
+        }
+    }
+}
+
+module.exports = {register, getAllUsers, login, editUser}
