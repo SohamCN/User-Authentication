@@ -69,11 +69,27 @@ const login = async (req, res, next) => {
 const editUser = async (req, res, next) => {
   const id = req.params.id
 
-  if (req.body.password) {
-    await bcrypt.hash(req.body.password, 10, async (err, hashedPass) => {
-      req.body.password = hashedPass
+  const editUser = async (req, res, next) => {
+    const id = req.params.id
+
+    if (req.body.password) {
+      await bcrypt.hash(req.body.password, 10, async (err, hashedPass) => {
+        req.body.password = hashedPass
+        try {
+          const updatedUser = await UserAuth.update(
+            req.body,
+            { where: { id: id } },
+            { new: true }
+          )
+          console.log(updatedUser)
+          res.status(200).send({ message: "Update Successful", updatedUser })
+        } catch (err) {
+          res.status(500).send(err.message)
+        }
+      })
+    } else {
       try {
-        let updatedUser = await UserAuth.update(
+        const updatedUser = await UserAuth.update(
           req.body,
           { where: { id: id } },
           { new: true }
@@ -81,23 +97,23 @@ const editUser = async (req, res, next) => {
         console.log(updatedUser)
         res.status(200).send({ message: "Update Successful", updatedUser })
       } catch (err) {
-        res.status(500).send(err.message)
+        res.status(500).send({
+          message: err.message,
+        })
       }
-    })
-  } else {
-    try {
-      let updatedUser = await UserAuth.update(
-        req.body,
-        { where: { id: id } },
-        { new: true }
-      )
-      res.status(200).send({ message: "Update Successful", updatedUser })
-    } catch (err) {
-      res.status(500).send({
-        message: err.message,
-      })
     }
   }
 }
 
-module.exports = { register, getAllUsers, login, editUser }
+const deleteUser = async (req, res, next) => {
+  const { id } = req.params
+  try {
+    let deleted = await UserAuth.destroy({ where: { id: id } })
+    console.log(deleted)
+    res.sendStatus(200).send(deleted)
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+
+module.exports = { register, getAllUsers, login, editUser, deleteUser }

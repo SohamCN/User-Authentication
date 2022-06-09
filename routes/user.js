@@ -21,6 +21,8 @@ router.put('/user-edit/:id',  postgreController.editUser);
 
 router.delete('/delete-user/:id', AuthController.deleteUser);
 
+router.delete('/user-delete/:id', postgreController.deleteUser);
+
 router.delete('/delete-all-users', AuthController.deleteAllUsers);
 
 module.exports =router
