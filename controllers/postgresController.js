@@ -75,7 +75,7 @@ const login = async(req,res,next)=>{
                 
                 req.body.password = hashedPass;
                 try{
-                    let updatedUser = await UserAuth.update(req.body,{where:{id:id}},{new:true});
+                    const updatedUser = await UserAuth.update(req.body,{where:{id:id}},{new:true});
                     console.log(updatedUser);
                     res.status(200).send({message: "Update Successful", updatedUser})
                 }catch(err){
@@ -84,7 +84,8 @@ const login = async(req,res,next)=>{
             })
         }else{
             try{
-        let updatedUser = await UserAuth.update(req.body,{where:{id:id}},{new:true})
+        const updatedUser = await UserAuth.update(req.body,{where:{id:id}},{new:true})
+            console.log(updatedUser);
             res.status(200).send({message:"Update Successful", updatedUser})
         }catch(err){
             res.status(500).send({
@@ -94,4 +95,15 @@ const login = async(req,res,next)=>{
     }
 }
 
-module.exports = {register, getAllUsers, login, editUser}
+const deleteUser = async(req,res,next)=>{
+    const {id} = req.params;
+    try{
+        let deleted = await UserAuth.destroy({where:{id:id}})
+        console.log(deleted);
+        res.sendStatus(200).send(deleted)
+    }catch(err){
+        res.status(500).send({message:err.message})
+    }
+}
+
+module.exports = {register, getAllUsers, login, editUser, deleteUser}
