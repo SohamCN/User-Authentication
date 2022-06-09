@@ -69,25 +69,9 @@ const login = async (req, res, next) => {
 const editUser = async (req, res, next) => {
   const id = req.params.id
 
-  const editUser = async (req, res, next) => {
-    const id = req.params.id
-
-    if (req.body.password) {
-      await bcrypt.hash(req.body.password, 10, async (err, hashedPass) => {
-        req.body.password = hashedPass
-        try {
-          const updatedUser = await UserAuth.update(
-            req.body,
-            { where: { id: id } },
-            { new: true }
-          )
-          console.log(updatedUser)
-          res.status(200).send({ message: "Update Successful", updatedUser })
-        } catch (err) {
-          res.status(500).send(err.message)
-        }
-      })
-    } else {
+  if (req.body.password) {
+    await bcrypt.hash(req.body.password, 10, async (err, hashedPass) => {
+      req.body.password = hashedPass
       try {
         const updatedUser = await UserAuth.update(
           req.body,
@@ -97,10 +81,22 @@ const editUser = async (req, res, next) => {
         console.log(updatedUser)
         res.status(200).send({ message: "Update Successful", updatedUser })
       } catch (err) {
-        res.status(500).send({
-          message: err.message,
-        })
+        res.status(500).send(err.message)
       }
+    })
+  } else {
+    try {
+      const updatedUser = await UserAuth.update(
+        req.body,
+        { where: { id: id } },
+        { new: true }
+      )
+      console.log(updatedUser)
+      res.status(200).send({ message: "Update Successful", updatedUser })
+    } catch (err) {
+      res.status(500).send({
+        message: err.message,
+      })
     }
   }
 }
