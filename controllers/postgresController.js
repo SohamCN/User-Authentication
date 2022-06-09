@@ -15,7 +15,7 @@ const register = async (req, res, next) => {
       const created = await UserAuth.create({
         username: req.body.username,
         password: hashedPass,
-        email: req.body.email,
+        // email: req.body.email,
       })
 
       res.status(200).send(created)

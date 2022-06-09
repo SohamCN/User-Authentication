@@ -17,7 +17,7 @@ router.post('/login', AuthController.login);
 
 router.put('/edit-user/:id', authMiddleware.verifyToken, AuthController.editUser);
 
-router.put('/user-edit/:id',  postgreController.editUser);
+router.put('/user-edit/:id', authMiddleware.verifyToken, postgreController.editUser);
 
 router.delete('/delete-user/:id', AuthController.deleteUser);
 

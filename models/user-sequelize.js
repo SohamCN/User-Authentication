@@ -38,10 +38,10 @@ module.exports = sequelize => {
       username: {
         type: Sequelize.STRING,
       },
-      email: {
+      /*email: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
+      },*/
       // phone: {
       //     type: DataTypes.INTEGER
       // },
