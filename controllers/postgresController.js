@@ -18,7 +18,7 @@ const register = async (req, res, next) => {
         // email: req.body.email,
       })
 
-      res.status(200).send(created)
+      res.status(201).send(created)
     } catch (err) {
       res.status(500).send(err.message)
     }
