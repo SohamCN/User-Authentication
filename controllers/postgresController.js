@@ -1,7 +1,8 @@
-const { Sequelize } = require("sequelize")
+//const { Sequelize } = require("sequelize")
 
-const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION_STRING)
-const UserAuth = require("../models/user-sequelize")(sequelize)
+//const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION_STRING)
+//const UserAuth = require("../models/user-sequelize")(sequelize)
+const UserAuth = require("../models/user-updated-sequelize");
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const register = async (req, res, next) => {
@@ -15,7 +16,8 @@ const register = async (req, res, next) => {
       const created = await UserAuth.create({
         username: req.body.username,
         password: hashedPass,
-        // email: req.body.email,
+        email: req.body.email,
+        phone: req.body.phone
       })
 
       res.status(201).send(created)
@@ -86,13 +88,13 @@ const editUser = async (req, res, next) => {
     })
   } else {
     try {
-      const updatedUser = await UserAuth.update(
+      await UserAuth.update(
         req.body,
-        { where: { id: id } },
-        { new: true }
+        { where: { id: id } }
       )
-      console.log(updatedUser)
-      res.status(200).send({ message: "Update Successful", updatedUser })
+      //console.log(updatedUser)
+      let updated = await UserAuth.findByPk(id);
+      res.status(200).send({ message: "Update Successful", updated })
     } catch (err) {
       res.status(500).send({
         message: err.message,
@@ -102,11 +104,12 @@ const editUser = async (req, res, next) => {
 }
 
 const deleteUser = async (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.params;
+  let deletedEntry = await UserAuth.findByPk(id);
   try {
     let deleted = await UserAuth.destroy({ where: { id: id } })
     console.log(deleted)
-    res.sendStatus(200).send(deleted)
+    res.sendStatus(200).send(deletedEntry)
   } catch (err) {
     res.status(500).send({ message: err.message })
   }

@@ -31,7 +31,7 @@ router.post('/register', authMiddleware.validatePassword, AuthController.registe
  *              type: string
  *        
  */
-router.post('/add-user', postgreController.register);
+router.post('/add-user', authMiddleware.validatePassword, postgreController.register);
 /**
  * @swagger
  * /user/create-login:

@@ -29,8 +29,8 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions)
 //console.log(swaggerDocs);
 // DB Connection
-//connectDB()
-postgresdb();
+connectDB();
+postgresdb.connected();
 
 // Use parsing middleware
 app.use(express.json())
@@ -44,6 +44,14 @@ app.use(morgan('tiny')); //log requests
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 const port = process.env.PORT || 8000
+
+postgresdb.sequelize.sync()    //this syncs model to the database by initializing the table or relation in the database according to model definition
+.then(()=>{
+  console.log("required database table and relations initialized");
+})
+.catch(err=>{
+  console.log(err);
+})
 
 // Starting a server
 app.listen(port, () => {
