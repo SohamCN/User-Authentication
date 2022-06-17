@@ -103,7 +103,7 @@ router.put('/edit-user/:id', authMiddleware.verifyToken, AuthController.editUser
  *            password:
  *              type: string
  */
-router.put('/user-edit/:id', authMiddleware.verifyToken, postgreController.editUser);
+router.put('/user-edit/:id', authMiddleware.verifyToken, authMiddleware.validatePassword, postgreController.editUser);
 
 router.delete('/delete-user/:id', AuthController.deleteUser);
 

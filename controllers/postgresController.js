@@ -5,6 +5,7 @@
 const UserAuth = require("../models/user-updated-sequelize");
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const passportMiddleware = require('../middlewares/passport-middleware')
 const register = async (req, res, next) => {
   await bcrypt.hash(req.body.password, 10, async (err, hashedPass) => {
     if (err) {
@@ -50,7 +51,7 @@ const login = async (req, res, next) => {
         })
       }
       if (result) {
-        let token = jwt.sign({ name: userloggedIn.name }, "verySecretValue", {
+        let token = jwt.sign({ id: userloggedIn.id }, passportMiddleware.jwtOptions.secretOrKey, {
           expiresIn: "1h",
         })
         res.json({
@@ -81,7 +82,8 @@ const editUser = async (req, res, next) => {
           { new: true }
         )
         console.log(updatedUser)
-        res.status(200).send({ message: "Update Successful", updatedUser })
+        let updated = await UserAuth.findByPk(id);
+        res.status(200).send({ message: "Update Successful", updated })
       } catch (err) {
         res.status(500).send(err.message)
       }

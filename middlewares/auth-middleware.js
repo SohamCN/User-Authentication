@@ -4,14 +4,14 @@ const jwt = require('jsonwebtoken');
 
 const verifyToken = (req,res,next)=>{
     let encoded = process.env.SECRET_KEY
-    console.log(encoded);
     try{
         jwt.verify(req.headers["authorization"], encoded);
         return next();
     }catch(err){
-        return res.status(500).send(err);
+        return res.status(500).send({message:err.message});
     }
 }
+
 /*const validateData = (req,res,next)=>{
     console.log("alukabli");
  let {name, email, phone, password} = req.body;

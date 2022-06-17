@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../database/postgres-connection');
+const phoneValidationRegex = /^[6-9]\d{9}$/;
 
 const User = db.sequelize.define('user',{
     id:{
@@ -25,9 +26,17 @@ const User = db.sequelize.define('user',{
             }
           }
       },
+    
     phone: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        validatePhone: (phone)=> {
+                      if(!(/^[6-9]\d{9}$/.test(phone))) {
+                          throw new Error('Phone Number Must be valid');
+                      }
+                  }
+              },
     }
   });
   
