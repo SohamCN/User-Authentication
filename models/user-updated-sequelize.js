@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const db = require('../database/postgres-connection');
-const phoneValidationRegex = /^[6-9]\d{9}$/;
 
 const User = db.sequelize.define('user',{
     id:{

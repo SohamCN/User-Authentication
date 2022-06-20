@@ -24,10 +24,16 @@ router.post('/register', authMiddleware.validatePassword, AuthController.registe
  *          required:
  *            - username
  *            - password
+ *            - email
+ *            - phone
  *          properties:
  *            username:
  *              type: string
  *            password:
+ *              type: string
+ *            email:
+ *              type: string
+ *            phone:
  *              type: string
  *        
  */
@@ -101,6 +107,10 @@ router.put('/edit-user/:id', authMiddleware.verifyToken, AuthController.editUser
  *            username:
  *              type: string
  *            password:
+ *              type: string
+ *            email:
+ *              type: string
+ *            phone:
  *              type: string
  */
 router.put('/user-edit/:id', authMiddleware.verifyToken, authMiddleware.validatePassword, postgreController.editUser);

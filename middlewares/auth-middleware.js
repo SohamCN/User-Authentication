@@ -41,10 +41,9 @@ const verifyToken = (req,res,next)=>{
     }
 }*/
 const validatePassword=(req,res,next)=> {
-    var {password} = req.body;
+    if(req.body.password){
     console.log("size amader",password.length);
     let errors = [];
-    if(password){
     if (password.length < 8) {
         // res.status(500).send({message:"Your password must be at least 8 characters"});
          errors.push("Your password must be at least 8 characters");
@@ -69,13 +68,13 @@ const validatePassword=(req,res,next)=> {
         errors.push("Your password must have atleast one special character");
     }
    if (errors.length > 0) {
-        return res.status(500).send({message: errors.join("  ")});
-        
+        return res.status(500).send({message: errors.join("  ")});      
     }
-    return next();
-}else{
     return next()
-} 
+    
+   }else{
+        return next()
+    }
 }
 
 module.exports = {verifyToken, validatePassword}

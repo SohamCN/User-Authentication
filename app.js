@@ -51,7 +51,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 const port = process.env.PORT || 8000
 
-postgresdb.sequelize.sync({force:true})    //this syncs model to the database by initializing the table or relation in the database according to model definition
+postgresdb.sequelize.sync()    //this syncs model to the database by initializing the table or relation in the database according to model definition
 .then(()=>{
   console.log("required database table and relations initialized");
 })
