@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
         type: String ,
         required:[true,'Password must be input']
     },
+    productId:{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref:'Product',
+        required:[true, 'Please Input productId']
+    }
 },{
     timestamps: true
 })
@@ -35,4 +40,21 @@ const userSchema = new mongoose.Schema({
 
 const UserAuthDB = mongoose.model('userAuth', userSchema);
 
-module.exports = UserAuthDB
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String, minlength: 3, maxLength:10, required:[true,'Name needs to be input']
+    },
+    quantity:{
+        type: Number , required:[true, 'Quantity needs to be input']
+    },
+    price:{
+        type: Number ,
+        required:[true,'Price must be specified']
+    },
+},{
+    timestamps: true
+})
+
+const ProductDB = mongoose.model('Product', productSchema);
+
+module.exports = {UserAuthDB, ProductDB}

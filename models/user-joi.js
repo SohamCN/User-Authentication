@@ -6,7 +6,8 @@ var joiUserSchema = Joi.object({
     name: Joi.string().required().min(3).max(10),
     email:Joi.string().email().required(),
     phone: Joi.string().regex(/^[6-9]\d{9}$/).required(),
-    password:Joi.string().required()
+    password:Joi.string().required(),
+    //userId: Joi.string().required().alphanum().meta({ type: 'objectId' }),
 })
 
 var mongooseUserSchema = new Mongoose.Schema(

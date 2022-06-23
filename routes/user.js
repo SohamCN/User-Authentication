@@ -6,6 +6,9 @@ const AuthController = require('../controllers/authController')
 const postgreController = require('../controllers/postgresController')
 
 router.post('/register', authMiddleware.validatePassword, AuthController.register);
+router.get('/get-user-by-id/:id',  AuthController.getUserById);
+router.get('/get-all-users',  AuthController.getAllUsers);
+router.post('/create-product',  AuthController.postProduct);
 
 /**
  * @swagger

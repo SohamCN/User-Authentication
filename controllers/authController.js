@@ -1,6 +1,9 @@
-const UserAuth = require('../models/user-joi');
+const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const UserAuth = User.UserAuthDB;
+const Product = User.ProductDB;
+
 const register = async(req,res,next)=>{
     bcrypt.hash(req.body.password, 10, async(err, hashedPass)=>{
         if(err){
@@ -13,7 +16,7 @@ const register = async(req,res,next)=>{
             email: req.body.email,
             phone: req.body.phone,
             password: hashedPass,
-            created_at: req.header.created_at
+            productId: req.body.productId
         })
         console.log("SaveHolo??",user);
         user.save()
@@ -127,4 +130,48 @@ const deleteAllUsers = async(req,res,next)=>{
     }
 }
 
-module.exports = {register, login, editUser, deleteUser, deleteAllUsers}
+const getUserById = async(req,res,next)=>{
+    
+    try{
+        let id = req.params.id
+        let user = await UserAuth.findById(id).select('productId').populate({'path':'productId',
+        'select':'name -_id'})
+        res.status(200).send(user)
+    }catch(err){
+        res.status(500).send({
+            message:err.message
+        })
+    }
+    
+}
+
+const getAllUsers = async(req,res,next)=>{
+    try{
+        let users = await UserAuth.find().populate({'path':'productId',
+    'match':{'name':'Guitar'}})
+        let filteredUsers = await users.filter(item=> (item.productId!=null))
+        res.status(200).send(filteredUsers)
+    }catch(err){
+        res.status(500).send({
+            message:err.message
+        })
+    }
+}
+
+const postProduct = async(req,res,next)=>{
+    try{
+        let newProduct = {
+            name:req.body.name,
+            quantity: req.body.quantity,
+            price:req.body.price
+        }
+        let product = await Product.create(newProduct)
+        res.status(200).send(product)
+    }catch(err){
+        res.status(500).send({
+            message:err.message
+        })
+    }
+}
+
+module.exports = {register, login, editUser, deleteUser, deleteAllUsers, getUserById, getAllUsers, postProduct}

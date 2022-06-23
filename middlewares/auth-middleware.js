@@ -41,7 +41,8 @@ const verifyToken = (req,res,next)=>{
     }
 }*/
 const validatePassword=(req,res,next)=> {
-    if(req.body.password){
+    let password = req.body.password
+    if(password){
     console.log("size amader",password.length);
     let errors = [];
     if (password.length < 8) {
