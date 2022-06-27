@@ -16,4 +16,24 @@ const connectDB = async() => {
         process.exit(1);
     }
 }
-module.exports = connectDB
+
+// const { MongoClient, ServerApiVersion } = require('mongodb');
+// const uri = "mongodb+srv://SohamCN:<capital@2022>@cluster0.yllx6.mongodb.net/?retryWrites=true&w=majority"
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const connectAtlasDB = async () => {
+    try {
+      await mongoose.connect(process.env.ATLAS, {
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
+        // useFindAndModify: false,
+        // useCreateIndex: true
+      });
+      console.log("mongoDB connected!");
+    } catch (error) {
+      console.error(error.message);
+      process.exit(1);
+    }
+  };
+
+
+module.exports = {connectDB, connectAtlasDB}

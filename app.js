@@ -16,6 +16,8 @@ dotenv.config({ path: '.env' })
 const AuthRoutes = require('./routes/user')
 const connectDB = require('./database/connection')
 const postgresdb = require('./database/postgres-connection')
+// const client = connectDB.client
+// console.log(client);
 
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
@@ -33,8 +35,20 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions)
 //console.log(swaggerDocs);
 // DB Connection
-connectDB();
+//connectDB.connectDB();
+connectDB.connectAtlasDB();
 postgresdb.connected();
+
+// console.log("connection amader",client.connect());
+// client.connect(err => {
+//     if(err){
+//         console.log(err.message);
+//     }else{
+//     const collection = client.db("test").collection("devices");
+//     // perform actions on the collection object
+//     client.close();
+//     console.log("MongoAtlasDB Connected");
+//   }});
 
 // Use parsing middleware
 app.use(express.json())
@@ -60,6 +74,10 @@ const port = process.env.PORT || 8000
 // })
 
 // Starting a server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App is running at localhost:${port}`)
+})
+const io = require(socket.io)(server);
+io.on('connection', socket=>{
+    console.log('Client Connected');
 })
