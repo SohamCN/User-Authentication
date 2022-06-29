@@ -35,8 +35,8 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions)
 //console.log(swaggerDocs);
 // DB Connection
-//connectDB.connectDB();
-connectDB.connectAtlasDB();
+connectDB.connectDB();
+//connectDB.connectAtlasDB();
 postgresdb.connected();
 
 // console.log("connection amader",client.connect());
@@ -77,7 +77,7 @@ const port = process.env.PORT || 8000
 const server = app.listen(port, () => {
   console.log(`App is running at localhost:${port}`)
 })
-const io = require(socket.io)(server);
+const io = require('./socket').init(server);
 io.on('connection', socket=>{
     console.log('Client Connected');
 })
