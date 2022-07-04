@@ -16,6 +16,7 @@ dotenv.config({ path: '.env' })
 const AuthRoutes = require('./routes/user')
 const connectDB = require('./database/connection')
 const postgresdb = require('./database/postgres-connection')
+
 // const client = connectDB.client
 // console.log(client);
 
@@ -35,9 +36,9 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions)
 //console.log(swaggerDocs);
 // DB Connection
-connectDB.connectDB();
+connectDB.connectAtlasDB()
 //connectDB.connectAtlasDB();
-postgresdb.connected();
+//postgresdb.connected();
 
 // console.log("connection amader",client.connect());
 // client.connect(err => {

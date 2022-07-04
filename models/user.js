@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     },
     productId:{
         type: mongoose.SchemaTypes.ObjectId,
-        ref:'Product',
+        ref:'product',
         required:[true, 'Please Input productId']
     }
 },{
@@ -55,6 +55,6 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const ProductDB = mongoose.model('Product', productSchema);
+const ProductDB = mongoose.model('product', productSchema);
 
 module.exports = {UserAuthDB, ProductDB}

@@ -1,8 +1,11 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const io = require('../socket');
+
 const UserAuth = User.UserAuthDB;
 const Product = User.ProductDB;
+
 
 const register = async(req,res,next)=>{
     bcrypt.hash(req.body.password, 10, async(err, hashedPass)=>{
@@ -166,6 +169,7 @@ const postProduct = async(req,res,next)=>{
             price:req.body.price
         }
         let product = await Product.create(newProduct)
+        io.getIO.emit('products',{action:'create', product: product})
         res.status(200).send(product)
     }catch(err){
         res.status(500).send({
